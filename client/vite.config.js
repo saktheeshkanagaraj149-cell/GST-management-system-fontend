@@ -18,4 +18,19 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'vendor-react';
+            if (id.includes('react-dom')) return 'vendor-react';
+            if (id.includes('react-router')) return 'vendor-router';
+            if (id.includes('lucide')) return 'vendor-ui';
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 });
