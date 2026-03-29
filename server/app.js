@@ -3,6 +3,7 @@ require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/auth.routes');
 const invoiceRoutes = require('./routes/invoice.routes');
@@ -13,6 +14,20 @@ const mcpRoutes = require('./routes/mcp.routes');
 const { errorHandler, notFound } = require('./middleware/error.middleware');
 
 const app = express();
+
+let isConnected = false;
+
+const ensureDB = async () => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+};
+
+app.use(async (req, res, next) => {
+  await ensureDB();
+  next();
+});
 
 // Security
 app.use(helmet());

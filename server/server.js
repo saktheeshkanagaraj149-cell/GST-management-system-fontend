@@ -18,16 +18,4 @@ const startServer = async () => {
   }
 };
 
-// ── Global unhandled exception safety nets ───────────────────────────────
-process.on('uncaughtException', (err) => {
-  console.error('💥 Uncaught Exception:', err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason) => {
-  console.error('💥 Unhandled Promise Rejection:', reason);
-  process.exit(1);
-});
-
 startServer();
