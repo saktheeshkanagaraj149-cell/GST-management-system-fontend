@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "pnpm install:all",
+  "installCommand": "pnpm install",
   "buildCommand": "cd client && pnpm run build",
   "outputDirectory": "client/dist",
   "framework": "vite",

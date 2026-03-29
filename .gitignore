@@ -1,11 +1,11 @@
 # Environment variables
 .env
 .env.local
+.env.production
 node_modules/
 */node_modules/
 dist/
 */dist/
 .vscode/
 .idea/
-.env
 .vercel
