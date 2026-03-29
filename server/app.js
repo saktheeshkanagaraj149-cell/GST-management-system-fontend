@@ -1,7 +1,9 @@
+//app.js
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/auth.routes');
 const invoiceRoutes = require('./routes/invoice.routes');
@@ -13,10 +15,24 @@ const { errorHandler, notFound } = require('./middleware/error.middleware');
 
 const app = express();
 
+let isConnected = false;
+
+const ensureDB = async () => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+};
+
+app.use(async (req, res, next) => {
+  await ensureDB();
+  next();
+});
+
 // Security
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: [process.env.CLIENT_URLS ? process.env.CLIENT_URLS.split(',') : []],
   credentials: true,
 }));
 
@@ -24,7 +40,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.get('/api/health', (req, res) => res.json({ 
+  status: 'ok',
+  timestamp: new Date().toISOString(),
+  database: isConnected ? 'connected' : 'disconnected',
+  cors: process.env.CLIENT_URLS ? process.env.CLIENT_URLS.split(',') : [],
+
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);

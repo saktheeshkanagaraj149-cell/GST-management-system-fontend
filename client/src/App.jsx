@@ -69,6 +69,7 @@ export default function App() {
       const state = useStore.getState();
       // Just accessing the state will trigger the init
       console.log('✅ Auth initialized:', state.isAuthReady);
+      console.log('Current token:', import.meta.env.VITE_API_URL, state.token ? 'Exists' : 'None');
     };
     
     initAuth();
