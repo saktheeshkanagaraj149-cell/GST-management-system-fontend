@@ -6,7 +6,11 @@
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev:all": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "start:server": "cd server && npm start"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
